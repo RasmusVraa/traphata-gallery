@@ -1,0 +1,18 @@
+[Unit]
+Description=TrapHata Gallery
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/rasmusvraa
+EnvironmentFile=-/var/www/rasmusvraa/.env
+Environment=NODE_ENV=production
+Environment=PORT=3010
+ExecStart=/usr/bin/node /var/www/rasmusvraa/server.js
+Restart=always
+RestartSec=3
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target
