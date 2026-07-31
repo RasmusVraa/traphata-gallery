@@ -1,8 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="TrapHata Gallery">
-  <rect width="64" height="64" rx="10" fill="#1a1613"/>
-  <rect x="8" y="8" width="48" height="48" rx="3" fill="#3d2a18" stroke="#d4b56a" stroke-width="2"/>
-  <rect x="14" y="14" width="36" height="36" fill="#ebe2d4"/>
-  <rect x="18" y="18" width="28" height="28" fill="#2a2420"/>
-  <path d="M18 40 L28 28 L36 36 L42 30 L46 40 Z" fill="#b8954a"/>
-  <circle cx="26" cy="24" r="3.5" fill="#d4b56a"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Файлы Трэп хаты">
+  <rect width="64" height="64" fill="#090b0d"/>
+  <rect x="8" y="8" width="48" height="48" fill="#171c22" stroke="#d6ff4b" stroke-width="2"/>
+  <path d="M16 40 L28 22 L36 34 L44 26 L48 40 Z" fill="#d6ff4b"/>
+  <rect x="16" y="44" width="32" height="4" fill="#2a323c"/>
 </svg>

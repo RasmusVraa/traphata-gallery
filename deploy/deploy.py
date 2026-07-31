@@ -101,6 +101,16 @@ def main() -> None:
             f"rm -f {remote_tgz}",
         )
 
+        run(
+            client,
+            f"mkdir -p {APP_DIR}/uploads/avatars && "
+            f"if [ ! -f {APP_DIR}/.env ] || ! grep -q '^SESSION_SECRET=' {APP_DIR}/.env; then "
+            f"echo SESSION_SECRET=$(openssl rand -hex 32) >> {APP_DIR}/.env; fi && "
+            f"grep -q '^PUBLIC_URL=' {APP_DIR}/.env || echo PUBLIC_URL=https://rasmusvraa.site >> {APP_DIR}/.env && "
+            f"grep -q '^SITE_ADMINS=' {APP_DIR}/.env || echo SITE_ADMINS=RasmusVraa >> {APP_DIR}/.env && "
+            f"chown -R www-data:www-data {APP_DIR}",
+        )
+
         run(client, f"cd {APP_DIR} && npm install --omit=dev")
 
         run(

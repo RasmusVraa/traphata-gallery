@@ -1,6 +1,6 @@
-# TrapHata Gallery
+# Файлы Трэп хаты
 
-Галерея картинок для [rasmusvraa.site](https://rasmusvraa.site): загрузка, рамки, скачивание, мини-админка.
+Галерея файлов для [rasmusvraa.site](https://rasmusvraa.site): фото, аудио и видео.
 
 ## Локальный запуск
 

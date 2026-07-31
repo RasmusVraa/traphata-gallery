@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Медиа-тетрис · Файлы Трэп хаты</title>
+    <meta name="description" content="Тетрис из фото и видео со стены." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css?v=tetris23" />
+    <link rel="stylesheet" href="/themes.css?v=tetris23" />
+    <link rel="stylesheet" href="/tetris.css?v=tetris23" />
+    <script src="/theme.js?v=tetris23"></script>
+  </head>
+  <body class="tetris-page">
+    <div class="atmosphere" aria-hidden="true">
+      <div class="atmosphere__grid"></div>
+      <div class="atmosphere__glow"></div>
+    </div>
+
+    <main class="tetris-shell">
+      <header class="tetris-top">
+        <a class="item-back" href="/">← На стену</a>
+        <h1 class="tetris-top__title">Медиа-тетрис</h1>
+        <p class="tetris-top__hint">←→ двигать · ↑ поворот · ↓ ускорить · Пробел сброс · P пауза</p>
+      </header>
+
+      <section id="game-tetris" class="tetris-view" aria-label="Медиа-тетрис">
+        <div class="tetris-layout">
+          <aside class="tetris-side">
+            <div class="tetris-stat tetris-stat--score">
+              <span>Счёт</span>
+              <strong id="tetris-score">0</strong>
+            </div>
+            <div class="tetris-stat">
+              <span>Рекорд</span>
+              <strong id="tetris-best">0</strong>
+            </div>
+            <div class="tetris-stat">
+              <span>Линии</span>
+              <strong id="tetris-lines">0</strong>
+            </div>
+            <div class="tetris-stat">
+              <span>Уровень</span>
+              <strong id="tetris-level">1</strong>
+            </div>
+            <div class="tetris-stat">
+              <span>Скорость</span>
+              <strong id="tetris-speed">1×</strong>
+            </div>
+            <label class="game-vol" for="tetris-vol">
+              <span class="game-vol__row">
+                <span>Громкость</span>
+                <strong id="tetris-vol-label">70%</strong>
+              </span>
+              <input id="tetris-vol" type="range" min="10" max="200" step="1" value="70" />
+            </label>
+            <p id="tetris-media-title" class="tetris-media-title"></p>
+            <div class="tetris-actions">
+              <button type="button" class="btn btn--ghost" id="tetris-pause">Пауза</button>
+              <button type="button" class="btn" id="tetris-restart">Заново</button>
+            </div>
+          </aside>
+
+          <div class="tetris-stage">
+            <div class="tetris-board-wrap">
+              <canvas id="tetris-board" width="400" height="800" role="img" aria-label="Поле тетриса"></canvas>
+              <div id="tetris-overlay" class="tetris-overlay">
+                <p id="tetris-overlay-title" class="tetris-overlay__title">Медиа-тетрис</p>
+                <p id="tetris-overlay-text" class="tetris-overlay__text">Фигурки из файлов стены. Нажми, чтобы начать.</p>
+                <button type="button" class="btn" id="tetris-overlay-btn">Играть</button>
+              </div>
+            </div>
+            <div class="tetris-next">
+              <span>Далее</span>
+              <canvas id="tetris-next" width="160" height="160" aria-hidden="true"></canvas>
+            </div>
+          </div>
+
+          <div class="tetris-touch" aria-label="Управление">
+            <button type="button" class="tetris-pad" data-tetris="left" aria-label="Влево">←</button>
+            <button type="button" class="tetris-pad" data-tetris="rotate" aria-label="Поворот">↻</button>
+            <button type="button" class="tetris-pad" data-tetris="right" aria-label="Вправо">→</button>
+            <button type="button" class="tetris-pad" data-tetris="down" aria-label="Вниз">↓</button>
+            <button type="button" class="tetris-pad tetris-pad--wide" data-tetris="drop" aria-label="Сброс">Сброс</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/tetris.js?v=tetris23"></script>
+  </body>
+</html>

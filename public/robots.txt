@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+User-agent: Discordbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /

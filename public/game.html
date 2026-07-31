@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Угадай название · Файлы Трэп хаты</title>
+    <meta name="description" content="Мини-игра: ежедневка на время, тренировка и онлайн-битва." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;700&family=Libre+Baskerville:wght@400;700&family=Onest:wght@300;400;500;600&family=Unbounded:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css?v=game37" />
+    <link rel="stylesheet" href="/themes.css?v=game37" />
+    <link rel="stylesheet" href="/game.css?v=game37" />
+    <script src="/theme.js?v=game37"></script>
+  </head>
+  <body class="game-body">
+    <div class="atmosphere" aria-hidden="true">
+      <div class="atmosphere__grid"></div>
+      <div class="atmosphere__glow"></div>
+    </div>
+
+    <main class="game-shell">
+      <a class="item-back" href="/">← На стену</a>
+
+      <section id="game-intro" class="game-hub">
+        <header class="game-hub__head">
+          <p class="game-kicker">Мини-игра</p>
+          <h1 class="game-title game-title--split">
+            <span>Угадай</span>
+            <span>название</span>
+          </h1>
+          <p class="game-hub__blurb">
+            Фото и видео со стены. Сначала варианты из того же тега — если мало, берём названия с сайта.
+          </p>
+          <p id="game-auth-hint" class="game-hint"></p>
+          <div id="game-auth-actions" class="game-auth-actions hidden">
+            <button type="button" class="btn" id="game-login-btn">Войти</button>
+            <button type="button" class="btn btn--ghost" id="game-register-btn">Создать аккаунт</button>
+          </div>
+        </header>
+
+        <div class="game-modes">
+          <button type="button" class="game-mode game-mode--daily" id="game-daily" disabled>
+            <div class="game-mode__top">
+              <span class="game-mode__label">Ежедневный</span>
+              <span class="game-mode__clock" id="daily-countdown" aria-live="polite">--:--:--</span>
+            </div>
+            <div class="game-mode__art" aria-hidden="true">
+              <span class="game-mode__orb"></span>
+              <span class="game-mode__ring"></span>
+            </div>
+            <p class="game-mode__title">Ранкед дня</p>
+            <p class="game-mode__text">
+              5 раундов на время, как в битве. Один заход в сутки. Только отсюда очки идут в профиль.
+            </p>
+            <span class="game-mode__cta" id="daily-cta">Играть</span>
+          </button>
+
+          <div class="game-modes__side">
+            <button type="button" class="game-mode game-mode--fun" id="game-start" disabled>
+              <span class="game-mode__icon" aria-hidden="true">◎</span>
+              <span class="game-mode__label">Тренировка</span>
+              <p class="game-mode__text">Обычное соло без таймера. Для кайфа — в профиль не пишется.</p>
+            </button>
+
+            <button type="button" class="game-mode game-mode--reveal" id="game-reveal" disabled>
+              <span class="game-mode__icon" aria-hidden="true">◐</span>
+              <span class="game-mode__label">Проявление</span>
+              <p class="game-mode__text">Соло на время: фото или видео появляется слева направо. В профиль не пишется.</p>
+            </button>
+
+            <button type="button" class="game-mode game-mode--battle" id="game-multiplayer" disabled>
+              <span class="game-mode__icon" aria-hidden="true">⚔</span>
+              <span class="game-mode__label">Мультиплеер</span>
+              <p class="game-mode__text">Создай комнату, войди по коду или выбери открытое лобби.</p>
+            </button>
+          </div>
+        </div>
+
+        <ol class="game-steps" aria-label="Как играть">
+          <li><strong>01</strong> Смотри медиа</li>
+          <li><strong>02</strong> Жми название</li>
+          <li><strong>03</strong> Копи очки в ежедневке</li>
+        </ol>
+
+        <p id="game-status" class="status" role="status"></p>
+      </section>
+
+      <section id="game-mp-hub" class="mp-arena hidden">
+        <button type="button" class="mp-arena__back" id="mp-hub-back">← На главную</button>
+        <div class="mp-arena__grid">
+          <aside class="mp-panel mp-panel--create">
+            <p class="mp-panel__eyebrow">Мультиплеер</p>
+            <h2 class="mp-panel__title">Онлайн-битва</h2>
+            <p class="mp-panel__lead">Создай комнату или зайди по коду. Настройки — уже в лобби.</p>
+            <button type="button" class="mp-cta" id="mp-create-room">Создать лобби</button>
+            <form id="game-join-form" class="mp-join-card">
+              <label class="mp-join-card__label" for="game-join-code">Код комнаты</label>
+              <div class="mp-join-card__row">
+                <input
+                  id="game-join-code"
+                  type="text"
+                  maxlength="6"
+                  placeholder="A3K9"
+                  autocomplete="off"
+                  spellcheck="false"
+                />
+                <button type="submit" class="mp-cta mp-cta--ghost" id="game-join-btn">Войти</button>
+              </div>
+            </form>
+            <p id="mp-hub-status" class="mp-arena__status" role="status"></p>
+          </aside>
+
+          <div class="mp-panel mp-panel--lobbies">
+            <div class="mp-lobbies__head">
+              <h3 class="mp-panel__subtitle">Открытые лобби</h3>
+              <button type="button" class="mp-icon-btn" id="mp-lobbies-refresh" title="Обновить">Обновить</button>
+            </div>
+            <ul id="mp-lobby-list" class="mp-lobby-list"></ul>
+            <p id="mp-lobbies-empty" class="mp-lobbies__empty hidden">Пока нет открытых комнат.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="game-lobby" class="lobby-room hidden">
+        <header class="lobby-room__head">
+          <button type="button" class="mp-arena__back" id="lobby-leave">← Покинуть лобби</button>
+          <div class="lobby-room__heading">
+            <h2 class="lobby-room__title">Лобби</h2>
+            <p class="lobby-room__sub" id="lobby-subline">Ожидание готовности</p>
+          </div>
+        </header>
+
+        <div class="lobby-room__grid">
+          <div class="lobby-room__players mp-panel">
+            <p class="mp-panel__subtitle">Игроки</p>
+            <ul id="lobby-players" class="lobby-slots"></ul>
+          </div>
+
+          <aside class="lobby-room__side">
+            <div id="lobby-settings" class="mp-panel lobby-settings hidden">
+              <div class="lobby-settings__head">
+                <p class="mp-panel__subtitle">Настройки</p>
+                <p id="lobby-settings-hint" class="lobby-settings__hint"></p>
+              </div>
+
+              <div class="lobby-seg-group">
+                <span class="lobby-seg-label">Режим</span>
+                <div class="lobby-seg" data-seg-for="lobby-play-mode">
+                  <button type="button" data-value="race">Гонка</button>
+                  <button type="button" data-value="reveal">Проявление</button>
+                </div>
+                <select id="lobby-play-mode" class="lobby-native-control" tabindex="-1" aria-hidden="true">
+                  <option value="race">Гонка</option>
+                  <option value="reveal">Проявление</option>
+                </select>
+              </div>
+
+              <div class="lobby-seg-group">
+                <span class="lobby-seg-label">Раундов</span>
+                <div class="lobby-seg" data-seg-for="lobby-rounds">
+                  <button type="button" data-value="3">3</button>
+                  <button type="button" data-value="5">5</button>
+                  <button type="button" data-value="10">10</button>
+                  <button type="button" data-value="15">15</button>
+                  <button type="button" data-value="20">20</button>
+                </div>
+                <input id="lobby-rounds" class="lobby-native-control" type="number" min="1" max="20" step="1" value="5" inputmode="numeric" tabindex="-1" aria-hidden="true" />
+              </div>
+
+              <div class="lobby-seg-group">
+                <span class="lobby-seg-label">Секунд</span>
+                <div class="lobby-seg" data-seg-for="lobby-round-sec">
+                  <button type="button" data-value="10">10</button>
+                  <button type="button" data-value="15">15</button>
+                  <button type="button" data-value="20">20</button>
+                  <button type="button" data-value="25">25</button>
+                  <button type="button" data-value="30">30</button>
+                </div>
+                <select id="lobby-round-sec" class="lobby-native-control" tabindex="-1" aria-hidden="true">
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20" selected>20</option>
+                  <option value="25">25</option>
+                  <option value="30">30</option>
+                  <option value="40">40</option>
+                </select>
+              </div>
+
+              <div class="lobby-seg-group">
+                <span class="lobby-seg-label">Медиа</span>
+                <div class="lobby-seg lobby-seg--wrap" data-seg-for="lobby-media">
+                  <button type="button" data-value="any">Любое</button>
+                  <button type="button" data-value="image">Фото</button>
+                  <button type="button" data-value="video">Видео</button>
+                  <button type="button" data-value="audio">Аудио</button>
+                </div>
+                <select id="lobby-media" class="lobby-native-control" tabindex="-1" aria-hidden="true">
+                  <option value="any">Фото, видео и аудио</option>
+                  <option value="image">Только фото</option>
+                  <option value="video">Только видео</option>
+                  <option value="audio">Только аудио</option>
+                </select>
+              </div>
+
+              <label class="lobby-tag-field">
+                <span class="lobby-seg-label">Тег</span>
+                <select id="lobby-tag">
+                  <option value="">Любые</option>
+                </select>
+              </label>
+            </div>
+
+            <div id="lobby-settings-readonly" class="mp-panel lobby-settings-readonly"></div>
+
+            <div class="mp-panel lobby-code-card">
+              <p class="lobby-seg-label">Код комнаты</p>
+              <div class="lobby-code-card__row">
+                <strong id="lobby-code">----</strong>
+                <button type="button" class="mp-cta mp-cta--ghost" id="lobby-copy-code">Скопировать</button>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <footer class="lobby-room__foot">
+          <p id="lobby-status" class="lobby-room__foot-status" role="status"></p>
+          <div class="lobby-room__foot-actions">
+            <button type="button" class="mp-cta mp-cta--ready" id="lobby-ready">Я готов</button>
+            <button type="button" class="mp-cta hidden" id="lobby-start" disabled>Старт</button>
+          </div>
+        </footer>
+      </section>
+
+      <section id="game-play" class="game-card game-play hidden" aria-live="polite">
+        <aside id="online-board" class="game-players game-players--live game-players--dock hidden" aria-label="Топ игроков"></aside>
+        <div class="game-play__main">
+          <div class="game-hud">
+            <div class="game-hud__chip">Раунд <strong id="game-round-num">1</strong>/<strong id="game-round-total">5</strong></div>
+            <div class="game-hud__chip">Очки <strong id="game-score">0</strong></div>
+            <div class="game-hud__chip">Попытки <strong id="game-attempts">3</strong></div>
+            <div class="game-hud__chip hidden" id="game-timer-chip">⏱️ <strong id="game-timer">20</strong>с</div>
+            <div class="game-hud__chip">Тег <strong id="game-tag">—</strong></div>
+            <div class="game-hud__chip hidden" id="game-mode-chip"><strong id="game-mode-label">—</strong></div>
+          </div>
+          <div class="game-progress" aria-hidden="true">
+            <div id="game-progress-bar" class="game-progress__bar"></div>
+          </div>
+          <div class="game-stage">
+            <div class="game-media-frame">
+              <div id="game-image-wrap" class="game-image-wrap">
+                <img id="game-image" class="game-image" alt="Картинка раунда" hidden />
+                <video id="game-video" class="game-image" playsinline loop preload="auto" hidden></video>
+                <div id="game-audio-wrap" class="game-audio-wrap hidden">
+                  <div class="game-audio-visual" aria-hidden="true">
+                    <span></span><span></span><span></span><span></span><span></span>
+                  </div>
+                  <p class="game-audio-label">Аудио</p>
+                  <audio id="game-audio" preload="auto" loop></audio>
+                </div>
+                <div id="game-reveal-veil" class="game-reveal-veil hidden" aria-hidden="true"></div>
+                <div id="game-burst" class="game-burst" hidden></div>
+                <div id="game-answer-fanfare" class="game-answer-fanfare hidden" aria-live="polite">
+                  <p class="game-answer-fanfare__kicker">Это было</p>
+                  <p id="game-answer-fanfare-title" class="game-answer-fanfare__title"></p>
+                  <div class="game-answer-fanfare__spark" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+            <label class="game-volume" title="Громкость">
+              <span class="game-volume__icon" aria-hidden="true">🔊</span>
+              <input id="game-volume" type="range" min="0" max="100" step="1" value="50" />
+              <span class="game-volume__pct" id="game-volume-pct">50%</span>
+            </label>
+          </div>
+          <p class="game-question">Как называется этот файл?</p>
+          <div id="game-options" class="game-options" role="listbox" aria-label="Варианты названия"></div>
+          <p id="game-feedback" class="game-feedback" role="status"></p>
+        </div>
+      </section>
+
+      <section id="game-result" class="game-card game-result hidden">
+        <p class="game-kicker">Финиш</p>
+        <h2 class="game-title game-title--sm" id="game-result-title">Игра окончена</h2>
+        <p class="game-final-score">
+          <span id="game-final-points">0</span>
+          <small id="game-final-caption">очков за эту игру</small>
+        </p>
+        <ul id="result-players" class="game-players hidden"></ul>
+        <p id="game-profile-score" class="game-lead"></p>
+        <div class="game-actions">
+          <button type="button" class="btn hidden" id="game-rematch">Реванш</button>
+          <button type="button" class="btn" id="game-again">На хаб</button>
+          <a class="btn btn--ghost" id="game-profile-link" href="/">К профилю</a>
+          <a class="btn btn--ghost" href="/">На стену</a>
+        </div>
+        <p id="game-rematch-status" class="status hidden" role="status"></p>
+      </section>
+    </main>
+
+    <div id="game-countdown" class="game-countdown hidden" aria-live="assertive" aria-atomic="true">
+      <div class="game-countdown__glow" aria-hidden="true"></div>
+      <div id="game-countdown-num" class="game-countdown__num">4</div>
+      <p id="game-countdown-label" class="game-countdown__label">Приготовьтесь</p>
+    </div>
+
+    <div id="game-timebar" class="game-timebar hidden" aria-hidden="true">
+      <div class="game-timebar__meta">
+        <span class="game-timebar__title">Осталось</span>
+        <span class="game-timebar__sec"><strong id="game-timebar-sec">20</strong>с</span>
+      </div>
+      <div class="game-timebar__track">
+        <div id="game-timebar-fill" class="game-timebar__fill"></div>
+      </div>
+    </div>
+
+    <dialog id="game-auth-dialog" class="panel">
+      <form id="game-auth-form" method="post" action="#">
+        <h2 id="game-auth-title">Вход</h2>
+        <p id="game-auth-form-hint" class="panel__hint">Ник: 3–24 символа. Пароль от 6 символов.</p>
+        <p id="game-auth-error" class="panel__error hidden" role="alert"></p>
+        <label class="field">
+          <span>Ник</span>
+          <input id="game-auth-username" type="text" maxlength="24" autocomplete="username" required />
+        </label>
+        <label class="field">
+          <span>Пароль</span>
+          <input id="game-auth-password" type="password" maxlength="128" autocomplete="current-password" required />
+        </label>
+        <label id="game-auth-password2-field" class="field hidden">
+          <span>Повторите пароль</span>
+          <input id="game-auth-password2" type="password" maxlength="128" autocomplete="new-password" />
+        </label>
+        <div class="panel__actions auth-actions">
+          <button type="button" id="game-auth-cancel" class="btn btn--ghost">Отмена</button>
+          <button type="button" id="game-auth-switch" class="btn btn--ghost">Создать аккаунт</button>
+          <button type="submit" class="btn" id="game-auth-submit">Войти</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="/game.js?v=game37"></script>
+  </body>
+</html>

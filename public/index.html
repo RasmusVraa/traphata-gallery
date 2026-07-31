@@ -3,52 +3,227 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>TrapHata — Галерея</title>
-    <meta name="description" content="Галерея TrapHata" />
+    <title>Файлы Трэп хаты</title>
+    <meta name="description" content="Файлы Трэп хаты — фото, аудио и видео" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Outfit:wght@300;400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;700&family=Libre+Baskerville:wght@400;700&family=Onest:wght@300;400;500;600&family=Unbounded:wght@500;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/styles.css?v=views1" />
+    <link rel="stylesheet" href="/themes.css?v=views1" />
+    <script src="/theme.js?v=views1"></script>
   </head>
   <body>
-    <div class="atmosphere" aria-hidden="true"></div>
+    <div class="atmosphere" aria-hidden="true">
+      <div class="atmosphere__grid"></div>
+      <div class="atmosphere__glow"></div>
+    </div>
 
     <header class="site-header">
-      <p class="brand">TrapHata</p>
-      <h1 class="headline">Галерея</h1>
-      <p class="lede">Загрузите изображение — оно займёт своё место на стене.</p>
-
-      <div class="header-actions">
-        <button type="button" id="open-upload" class="btn">Загрузить картинку</button>
-        <button type="button" id="open-admin" class="btn btn--ghost">Админ</button>
+      <div class="site-header__top">
+        <div class="site-header__brand">
+          <p class="brand">Файлы<br />Трэп хаты</p>
+          <p class="lede">Склад фото, треков и клипов. Закинь своё — остальное сделает стена.</p>
+          <p id="storage-stats" class="storage-stats" aria-live="polite"></p>
+        </div>
+        <div class="account-bar">
+          <button type="button" id="open-upload" class="btn">Загрузить</button>
+          <button type="button" id="reshuffle" class="btn btn--ghost">Обновить рекомендации</button>
+          <button type="button" id="open-settings" class="btn btn--ghost">Темы</button>
+          <button type="button" id="open-auth" class="btn btn--ghost">Войти</button>
+          <div id="user-chip" class="user-chip hidden" aria-live="polite"></div>
+          <button type="button" id="logout-user" class="btn btn--ghost btn--icon hidden" aria-label="Выйти" title="Выйти">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+          </button>
+        </div>
       </div>
       <p id="status" class="status" role="status" aria-live="polite"></p>
-      <p id="admin-badge" class="admin-badge hidden">Режим админа · <button type="button" id="admin-logout" class="linkish">выйти</button></p>
+      <div id="upload-progress" class="upload-progress hidden" aria-hidden="true">
+        <div class="upload-progress__track">
+          <div id="upload-progress-bar" class="upload-progress__bar"></div>
+        </div>
+        <p id="upload-progress-label" class="upload-progress__label">0%</p>
+      </div>
     </header>
 
-    <main>
-      <section class="gallery" aria-label="Картины">
-        <div id="gallery" class="gallery__wall"></div>
-        <p id="empty" class="empty hidden">Пока пусто — загрузите первую картину.</p>
-      </section>
-    </main>
+    <div class="layout">
+      <nav class="categories" aria-label="Категории">
+        <p class="categories__label">Категории</p>
+        <a class="cat-btn" href="/" data-cat="all">
+          <svg class="cat-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1"/><rect x="13.5" y="3.5" width="7" height="7" rx="1"/><rect x="3.5" y="13.5" width="7" height="7" rx="1"/><rect x="13.5" y="13.5" width="7" height="7" rx="1"/></svg>
+          <span>Все</span>
+        </a>
+        <a class="cat-btn" href="/c/top" data-cat="top">
+          <svg class="cat-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 20h8v-1.5H8V20zm4-16.5L9.2 9H11v5.5h2V9h1.8L12 3.5z"/></svg>
+          <span>Топ</span>
+        </a>
+        <a class="cat-btn" href="/c/legendary" data-cat="legendary">
+          <svg class="cat-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 15.5L5 6.5l4.2 4L12 5.5l2.8 5 4.2-4-1.5 9H6.5zm1.8 1.8h7.4L17 19.5H7l1.3-2.2z"/></svg>
+          <span>Легенды</span>
+        </a>
+        <a class="cat-btn" href="/c/date" data-cat="date">
+          <svg class="cat-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4.5h1.5V6h5V4.5H16V6h2.5v13.5h-13V6H8V4.5zm9 6.5H7v8h10v-8zM8 7.5v1.5h8V7.5H8z"/></svg>
+          <span>По дате</span>
+        </a>
+        <a class="cat-btn" href="/c/image" data-cat="image">
+          <svg class="cat-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14v12H5V6zm1.5 1.5v7.2l3-3 2.3 2.3 3.2-3.7 2.5 2.5V7.5h-11zm2.6 2.3a1.2 1.2 0 110-2.4 1.2 1.2 0 010 2.4z"/></svg>
+          <span>Фото</span>
+        </a>
+        <a class="cat-btn" href="/c/audio" data-cat="audio">
+          <svg class="cat-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5.5v10.2a2.8 2.8 0 10-1.6 2.5V8.5h6.1V5.5H11zm-1.6 12.7a1.2 1.2 0 110-2.4 1.2 1.2 0 010 2.4z"/></svg>
+          <span>Аудио</span>
+        </a>
+        <a class="cat-btn" href="/c/video" data-cat="video">
+          <svg class="cat-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h10v10H5V7zm11.5 2.2 2.5-1.2v8l-2.5-1.2V9.2z"/></svg>
+          <span>Видео</span>
+        </a>
+        <a class="cat-btn" href="/c/authors" data-cat="authors">
+          <svg class="cat-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 11a3 3 0 110-6 3 3 0 010 6zm6.2-.4a2.4 2.4 0 100-4.8 2.4 2.4 0 000 4.8zM4.5 18.8C4.5 16.4 6.8 15 9.5 15s5 1.4 5 3.8V20h-10v-1.2zm10.3-2.5c2.2 0 4.7.9 4.7 2.8V20h-3.5v-1.1c0-1.1-.6-2-1.5-2.6.1 0 .2 0 .3 0z"/></svg>
+          <span>Авторы</span>
+        </a>
+        <a class="cat-btn hidden" href="/c/mine" data-cat="mine" id="mine-cat">
+          <svg class="cat-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 11.5a3.25 3.25 0 100-6.5 3.25 3.25 0 000 6.5zm0 1.5c-3.4 0-6 1.7-6 3.9V20h12v-3.1c0-2.2-2.6-3.9-6-3.9z"/></svg>
+          <span>Мои</span>
+        </a>
+        <a class="cat-btn hidden" href="/c/audit" data-cat="audit" id="audit-cat">
+          <svg class="cat-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4.5h6.2L18.5 9v10.5H8V4.5zm6.2 1.2v3.8h3.8l-3.8-3.8zM10 12h6v1.3h-6V12zm0 3h6V16.3h-6V15zm0 3h4v1.3h-4V18z"/></svg>
+          <span>Аудит</span>
+        </a>
+      </nav>
+
+      <main class="content">
+        <section id="profile-panel" class="profile-panel hidden"></section>
+        <section id="authors-panel" class="authors-panel hidden"></section>
+        <section id="audit-panel" class="audit-panel hidden"></section>
+        <p id="category-title" class="category-title hidden"></p>
+        <div id="tag-bar" class="tag-bar hidden" aria-label="Популярные теги"></div>
+        <section class="gallery" aria-label="Файлы">
+          <div id="gallery" class="gallery__wall"></div>
+          <p id="empty" class="empty hidden">Пока пусто в этой категории.</p>
+        </section>
+      </main>
+    </div>
+
+    <a href="/blockblast" class="blast-fab" title="Block Blast">
+      <span class="blast-fab__glow" aria-hidden="true"></span>
+      <span class="blast-fab__icon" aria-hidden="true">▣</span>
+      <span class="blast-fab__text">
+        <strong>Block Blast</strong>
+        <em>фото и видео</em>
+      </span>
+    </a>
+
+    <a href="/tetris" class="tetris-fab" title="Медиа-тетрис">
+      <span class="tetris-fab__glow" aria-hidden="true"></span>
+      <span class="tetris-fab__icon" aria-hidden="true">▦</span>
+      <span class="tetris-fab__text">
+        <strong>Тетрис</strong>
+        <em>из фото и видео</em>
+      </span>
+    </a>
+
+    <a href="/game" class="game-fab" title="Угадай название">
+      <span class="game-fab__glow" aria-hidden="true"></span>
+      <span class="game-fab__icon" aria-hidden="true">🎮</span>
+      <span class="game-fab__text">
+        <strong>Игра</strong>
+        <em>угадай название</em>
+      </span>
+    </a>
+
+    <button type="button" id="random-file" class="luck-btn" title="Открыть случайный файл">
+      <span class="luck-btn__glow" aria-hidden="true"></span>
+      <span class="luck-btn__dice" aria-hidden="true">🎲</span>
+      <span class="luck-btn__text">
+        <strong>Мне повезёт</strong>
+        <em>случайный файл</em>
+      </span>
+    </button>
+
+    <dialog id="settings-dialog" class="panel">
+      <form id="settings-form" method="dialog">
+        <h2>Настройки темы</h2>
+        <p class="panel__hint">Тема только у вас. «Рандом дня» меняет оформление раз в сутки (МСК).</p>
+        <p id="settings-theme-current" class="panel__hint"></p>
+        <div id="theme-grid" class="theme-grid" role="listbox" aria-label="Темы"></div>
+        <div class="panel__actions">
+          <button type="button" id="settings-close" class="btn btn--ghost" value="cancel">Закрыть</button>
+        </div>
+      </form>
+    </dialog>
 
     <dialog id="upload-dialog" class="panel">
       <form id="upload-form" method="dialog">
-        <h2>Новая картина</h2>
+        <h2>Новый файл</h2>
         <label class="field">
           <span>Название</span>
-          <input id="upload-title" name="title" type="text" maxlength="120" placeholder="Например: Закат у моря" required />
+          <input id="upload-title" name="title" type="text" maxlength="120" placeholder="Например: night drive" required />
         </label>
-        <label class="field">
-          <span>Файл</span>
-          <input id="upload-file" name="image" type="file" accept="image/*" required />
+        <div class="field">
+          <span>Фото, аудио или видео</span>
+          <div class="file-pick" id="upload-file-pick">
+            <input
+              id="upload-file"
+              class="file-pick__input"
+              name="file"
+              type="file"
+              accept="image/*,audio/*,video/*,.mp3,.wav,.ogg,.m4a,.flac,.aac,.opus,.mp4,.webm,.mov,.mkv,.m4v"
+              required
+            />
+            <div class="file-pick__face" aria-hidden="true">
+              <span class="file-pick__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 16V5" />
+                  <path d="M8.5 8.5 12 5l3.5 3.5" />
+                  <path d="M5 14.5V18a1.5 1.5 0 0 0 1.5 1.5h11A1.5 1.5 0 0 0 19 18v-3.5" />
+                </svg>
+              </span>
+              <span class="file-pick__copy">
+                <strong class="file-pick__title">Выберите файл</strong>
+                <span class="file-pick__hint">или перетащите сюда · фото, аудио, видео</span>
+              </span>
+              <span class="file-pick__meta" id="upload-file-meta" hidden></span>
+              <span class="file-pick__btn">Обзор</span>
+            </div>
+          </div>
+        </div>
+        <label class="field field--suggest">
+          <span>Теги (через запятую, до 8)</span>
+          <input
+            id="upload-tags"
+            name="tags"
+            type="text"
+            maxlength="200"
+            autocomplete="off"
+            placeholder="например: trap, night, meme"
+          />
+          <ul id="upload-tags-suggest" class="tag-suggest__list hidden" role="listbox" hidden></ul>
         </label>
+        <div id="upload-account-options" class="upload-options hidden">
+          <p class="panel__hint">Как опубликовать?</p>
+          <label class="check">
+            <input type="radio" name="upload-as" value="named" checked />
+            <span>От моего ника</span>
+          </label>
+          <label class="check">
+            <input type="radio" name="upload-as" value="anonymous" />
+            <span>Анонимно</span>
+          </label>
+          <label class="check">
+            <input id="upload-unlisted" type="checkbox" />
+            <span>Только по ссылке</span>
+          </label>
+        </div>
+        <p id="upload-limit-hint" class="panel__hint">Лимит для гостей: 200 МБ. После входа — до 500 МБ.</p>
+        <p id="upload-guest-hint" class="panel__hint">Гость: файл будет анонимным. Войдите, чтобы публиковать от ника.</p>
         <div class="panel__actions">
           <button type="button" id="upload-cancel" class="btn btn--ghost" value="cancel">Отмена</button>
           <button type="submit" class="btn" value="default">Загрузить</button>
@@ -56,26 +231,57 @@
       </form>
     </dialog>
 
-    <dialog id="admin-dialog" class="panel">
-      <form id="admin-form" method="dialog">
-        <h2>Админ</h2>
-        <p class="panel__hint">Введите пароль, чтобы удалять картины.</p>
+    <dialog id="auth-dialog" class="panel">
+      <form id="auth-form" method="post" action="#">
+        <h2 id="auth-title">Вход</h2>
+        <p id="auth-hint" class="panel__hint">Ник: латиница или кириллица, цифры и _, 3–24 символа. Пароль от 6 символов.</p>
+        <p id="auth-error" class="panel__error hidden" role="alert"></p>
+        <label class="field">
+          <span>Ник</span>
+          <input id="auth-username" type="text" maxlength="24" autocomplete="username" required />
+          <small id="auth-username-status" class="field-status" aria-live="polite"></small>
+        </label>
         <label class="field">
           <span>Пароль</span>
-          <input id="admin-password" type="password" autocomplete="current-password" required />
+          <input id="auth-password" type="password" maxlength="128" autocomplete="current-password" required />
         </label>
+        <label id="auth-password2-field" class="field hidden">
+          <span>Повторите пароль</span>
+          <input id="auth-password2" type="password" maxlength="128" autocomplete="new-password" />
+        </label>
+        <div class="panel__actions auth-actions">
+          <button type="button" id="auth-cancel" class="btn btn--ghost">Отмена</button>
+          <button type="button" id="auth-switch" class="btn btn--ghost">Создать аккаунт</button>
+          <button type="submit" class="btn" id="auth-submit">Войти</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="tags-dialog" class="panel">
+      <form id="tags-form" class="panel__form">
+        <h2 class="panel__title">Теги файла</h2>
+        <p class="panel__hint">Через запятую, до 8 штук. Буквы, цифры, дефис.</p>
+        <label class="field field--suggest">
+          <span>Теги</span>
+          <input id="tags-input" type="text" maxlength="200" autocomplete="off" placeholder="trap, night, meme" />
+          <ul id="tags-input-suggest" class="tag-suggest__list hidden" role="listbox" hidden></ul>
+        </label>
+        <div id="tags-preview" class="tags-preview" aria-live="polite"></div>
+        <p id="tags-error" class="status" role="status"></p>
         <div class="panel__actions">
-          <button type="button" id="admin-cancel" class="btn btn--ghost">Отмена</button>
-          <button type="submit" class="btn">Войти</button>
+          <button type="button" id="tags-cancel" class="btn btn--ghost">Отмена</button>
+          <button type="submit" class="btn" id="tags-save">Сохранить</button>
         </div>
       </form>
     </dialog>
 
     <div id="lightbox" class="lightbox" hidden>
       <button type="button" class="lightbox__close" aria-label="Закрыть">&times;</button>
-      <img id="lightbox-img" alt="" />
+      <img id="lightbox-img" alt="" hidden />
+      <video id="lightbox-video" controls playsinline hidden></video>
     </div>
 
-    <script src="/app.js"></script>
+    <script src="/player.js?v=prof11"></script>
+    <script src="/app.js?v=views1"></script>
   </body>
 </html>

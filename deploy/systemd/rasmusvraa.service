@@ -8,6 +8,8 @@ WorkingDirectory=/var/www/rasmusvraa
 EnvironmentFile=-/var/www/rasmusvraa/.env
 Environment=NODE_ENV=production
 Environment=PORT=3010
+Environment=PUBLIC_URL=https://rasmusvraa.site
+Environment=SITE_ADMINS=RasmusVraa
 ExecStart=/usr/bin/node /var/www/rasmusvraa/server.js
 Restart=always
 RestartSec=3
